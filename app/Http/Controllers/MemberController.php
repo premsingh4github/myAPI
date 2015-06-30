@@ -144,9 +144,12 @@ class MemberController extends Controller
 
     }
     public function getUnverifiedMember(){
-        $members = Member::select('id')->where('status','=','0')->get();
+        $members = Member::select('*')->where('status','=','0')->get();
+        
         return Response::json(array(
-                'members'=> $members
+                'status' => 'ok',
+                'members'=> $members,
+                'code' => 200
             ));
     }
     public function verifyMember(Request $request){
