@@ -29,4 +29,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
         return Response::json($returnData,200);
 	});
 	Route::post('/getOnlineUser','MemberController@getOnlineUser');
+    Route::post('/createBranch','BranchController@create');
+    Route::post('/deleteBranch','BranchController@delete');
+    Route::post('/createLocation','LocationController@create');
+    Route::post('/deleteLocation','LocationController@delete');
 });
