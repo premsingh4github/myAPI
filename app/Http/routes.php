@@ -29,4 +29,5 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
         return Response::json($returnData,200);
 	});
 	Route::post('/getOnlineUser','MemberController@getOnlineUser');
+    Route::post('/logout','MemberController@logout');
 });

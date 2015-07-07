@@ -144,9 +144,11 @@ class MemberController extends Controller
 
     }
     public function getUnverifiedMember(){
-        $members = Member::select('id')->where('status','=','0')->get();
+        $members = Member::select('*')->where('status','=','0')->get();
         return Response::json(array(
-                'members'=> $members
+                'status' => 'ok',
+                'members'=> $members,
+                'code' => 200
             ));
     }
     public function verifyMember(Request $request){
@@ -177,6 +179,26 @@ class MemberController extends Controller
     }
     public function getOnlineUser(){
         return Login::getOnlineUser();
+    }
+    public function logout(Request $request){
+         if(Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->update(array('status' => 0))){
+                $returnData = array(
+                    'status' => 'ok',
+                    'message' => 'logout success',
+                    'code' =>200
+                );
+                return $returnData ; 
+         }
+         else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'Invalid token',
+                    'code' =>500
+                );
+            return $returnData ;
+         }
+         
+        
     }
 
 }
