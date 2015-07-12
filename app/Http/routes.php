@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('index','MemberController@index');
 Route::post('register','MemberController@store');
 Route::post('login','MemberController@login');
 Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
@@ -28,6 +29,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
                 );
         return Response::json($returnData,200);
 	});
-	Route::post('/getOnlineUser','MemberController@getOnlineUser');
+	Route::post('/getOnlineMember','MemberController@getOnlineMember');
     Route::post('/logout','MemberController@logout');
 });
+Route::post('/connectSocket','SocketController@create');
+Route::get('/connectSocket','SocketController@create');

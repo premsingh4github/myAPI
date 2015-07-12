@@ -6,28 +6,18 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Member;
-use Auth;
-use Hash;
-use App\User;
-use Response;
-use App\Login;
+use App\Login ;
 
-class MemberController extends Controller
+class socketController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('API', ['except' => 'getLogout']);
-    // }
     public function index()
-    {   
-        $login = new Member;
-        return $login->getAllMember();
+    {
+        //
     }
 
     /**
@@ -35,181 +25,8 @@ class MemberController extends Controller
      *
      * @return Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->count();
-        //$login = "empty";
-        return $login;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        $data = $request->only('fname','email','mname','lname','address','identity','nationality','dob','ban','cNumber','mNumber');
-        //return $data;
-        $member = new Member;
-        $member->fname = $data['fname'];
-        $member->mname = $data['mname'];
-        $member->lname = $data['lname'];
-        $member->email = $data['email'];
-        $member->address = $data['address'];
-        $member->identity = $data['identity'];
-        $member->nationality = $data['nationality'];
-        $member->dob = $data['dob'];
-        $member->ban = $data['ban'];
-        $member->cNumber = $data['cNumber'];
-        $member->mNumber = $data['mNumber'];
-        $member->status = "0";
-        $member->mtype = "0";
-        $member->password = Hash::make('password');
-        $member->save();
-        return $member->id;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-        $member = Member::find(2);
-        //return $member;
-        $member->username = $request->only('username');
-        return $member->username;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    public function login(Request $request){
-        $data = $request->only('username','password');
-        if(Auth::attempt($data)){
-            $login = new Login;
-            $login->member_id = Auth::user()->id;
-            $login->remember_token = str_random(15);;
-            $login->status = 1;
-            $login->login_from = $request->ip();
-            $login->save();
-            $token = Auth::user()->id.$request->ip();
-            $returnData = array(
-                    'status' => 'ok',
-                    'message' => 'login success',
-                    'token' => $login->remember_token,
-                    'code' =>200
-                );
-            return Response::json($returnData, 200);
-        }else{
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'invalid credential',
-                    'code' => 500
-                );
-            return Response::json($returnData, 500);
-        }
-        return $request->only('email','password');
-
-    }
-    public function getUnverifiedMember(){
-        $members = Member::select('*')->where('status','=','0')->get();
-        return Response::json(array(
-                'status' => 'ok',
-                'members'=> $members,
-                'code' => 200
-            ));
-    }
-    public function verifyMember(Request $request){
-        $data = $request->only('member_id','username','password','mtype');
-        $member = Member::find($data['member_id']);
-        $member->username = $data['username'];
-        $member->password = Hash::make($data['password']);
-        $member->mtype = $data['mtype'];
-        $member->status = 1;
-
-        //return $member ;
-        if($member->save()){
-            $returnData = array(
-                    'status' => 'ok',
-                    'message' => 'member verified',
-                    'code' =>200
-                );
-            return Response::json($returnData, 200);
-        }
-        else{
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'member verified',
-                    'code' =>500
-                );
-            return Response::json($returnData, 200);
-        }
-    }
-    public function getOnlineMember(){
-
-            $login = new Member;
-             $returnData = array(
-                    'status' => 'ok',
-                    'members' => $login->getAllMember(),
-                    'code' =>200
-                );
-                return $returnData ; 
-    }
-    public function logout(Request $request){
-         if(Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->update(array('status' => 0))){
-                $returnData = array(
-                    'status' => 'ok',
-                    'message' => 'logout success',
-                    'code' =>200
-                );
-                return $returnData ; 
-         }
-         else{
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'Invalid token',
-                    'code' =>500
-                );
-            return $returnData ;
-         }
-         
-        
-    }
-    public function socket(){
-
         
         $host = 'localhost'; //host
         $port = '9000'; //port
@@ -228,7 +45,7 @@ class MemberController extends Controller
 
         //create & add listning socket to the list
         $clients = array($socket);
-
+        $clientAllocation = array();
         //start endless loop, so that our script doesn't stop
         while (true) {
             //manage multipal connections
@@ -301,7 +118,6 @@ class MemberController extends Controller
                 //send_message($response); //notify all users about new connection
                 foreach($clients as $changed_socket)
                     {
-
                         @socket_write($changed_socket,$response,strlen($response));
                        
                     }
@@ -344,14 +160,28 @@ class MemberController extends Controller
 
 
                     $tst_msg = json_decode($received_text); //json decode 
-                    $user_name = $tst_msg->name; //sender name
-                    $user_message = $tst_msg->message; //message text
-                    $user_color = $tst_msg->color; //color
-                    
-                    // //prepare data to be sent to client
-                    // $response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
-
-                    $text = json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color));
+                   
+                        $receiver_id = $tst_msg->id; //sender name
+                        $user_message = $tst_msg->message; //message text
+                        $user_color = $tst_msg->color; //color
+                        $user_id = $this->getUserIdByToken($tst_msg->token);
+                        $key = array_keys($changed, $changed_socket);
+                        $position = $key[0];
+                        $user_message  .= $position;
+                        if(array_search($user_id,$clientAllocation)){
+                            if(array_search($user_id,$clientAllocation) != $position){
+                                $clientAllocation[$position] = $user_id;
+                                
+                            }  
+                        }
+                        else{
+                            $clientAllocation[$position] = $user_id;
+                        }
+                        
+                        // //prepare data to be sent to client
+                        // $response_text = mask(json_encode(array('type'=>'usermsg', 'name'=>$user_name, 'message'=>$user_message, 'color'=>$user_color)));
+                        
+                        $text = json_encode(array('type'=>'usermsg', 'id'=>$user_id, 'message'=>$user_message, 'color'=>$user_color));
                         $b1 = 0x80 | (0x1 & 0x0f);
                         $length = strlen($text);
                         
@@ -363,15 +193,23 @@ class MemberController extends Controller
                             $header = pack('CCNN', $b1, 127, $length);
                         $response_text = $header.$text;
 
-
-
-
-
-
-                        foreach($clients as $changed_socket)
-                        {
-                            @socket_write($changed_socket,$response_text,strlen($response_text));
+                        if($receiver_id != "test"){
+                           foreach (array_keys($clientAllocation,$receiver_id) as $value) {
+                               @socket_write($clients[$value],$response_text,strlen($response_text));
+                           }
+                            
                         }
+                       
+                       
+
+
+
+
+
+                        // foreach($clients as $changed_socket)
+                        // {
+                        //     @socket_write($changed_socket,$response_text,strlen($response_text));
+                        // }
                     break 2; //exist this loop
                 }
                 
@@ -410,6 +248,63 @@ class MemberController extends Controller
 
 
 
+
+    }
+    public function getUserIdByToken($token){
+            $user = Login::select('member_id')->where('remember_token','=',$token)->first();
+            return $user->member_id;
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        //
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 }
