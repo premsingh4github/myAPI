@@ -31,6 +31,7 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
 	});
 	Route::post('/getOnlineMember','MemberController@getOnlineMember');
     Route::post('/logout','MemberController@logout');
+    Route::post('/createBranch','BranchController@create');
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');
