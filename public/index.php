@@ -1,5 +1,6 @@
 <?php
-
+$timezone = "Asia/Kathmandu";
+date_default_timezone_set($timezone);
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

@@ -18,7 +18,13 @@ class BranchController extends Controller
      */
     public function index()
     {
-        //
+        $branches = Branch::all();
+             $returnData = array(
+                    'status' => 'ok',
+                    'branches' => $branches,
+                    'code' =>200
+                );
+                return $returnData ;
     }
 
     /**
@@ -28,9 +34,14 @@ class BranchController extends Controller
      */
     public function create(Request $request)
     {
-        $data = $request->only('branchName');
+        $data = $request->only('branchName','branchLocation');
         $branch = new Branch;
         $branch->name = $data['branchName'];
+        $branch->location = $data['branchLocation'];
+        $timezone = "Asia/Kathmandu";
+        date_default_timezone_set($timezone);
+        $branch->created_at = date('Y-m-d H:i:s',time());
+
          if($branch->save()){
             $returnData = array(
                     'status' => 'ok',

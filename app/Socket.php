@@ -139,24 +139,13 @@ while (true) {
 			$user_color = $tst_msg->color; //color
 			$key = array_keys($changed, $changed_socket);
             $position = $key[0];
-			$user_message  .= $position;
 			if(array_search($user_id,$clientAllocation)){
-				
 			    if(array_search($user_id,$clientAllocation) != $position){
 			        $clientAllocation[$position] = $user_id;
-			        $user_message  .= "--"."old one from new system";
-			    } 
-			    else{
-    					
-			    	$user_message  .= "--"."old one from old system";
-			    } 
-				foreach (array_keys($clientAllocation,$user_id) as $value) {
-                               $user_message  .= "..". $value ."..";
-                           }
+			    }
 			}
 			else{
 			    $clientAllocation[$position] = $user_id;
-			    $user_message  .= "--New person";
 			}
 			$text = json_encode(array('type'=>'usermsg', 'name'=>$user_id, 'message'=>$user_message, 'color'=>$user_color));
 				$b1 = 0x80 | (0x1 & 0x0f);
@@ -191,21 +180,21 @@ while (true) {
 			$found_socket = array_search($changed_socket, $clients);
 			socket_getpeername($changed_socket, $ip);
 			unset($clients[$found_socket]);
-				$text = json_encode(array('type'=>'system', 'message'=>$ip.' disconnected'));
-				$b1 = 0x80 | (0x1 & 0x0f);
-				$length = strlen($text);
+			// 	$text = json_encode(array('type'=>'system', 'message'=>$ip.' disconnected'));
+			// 	$b1 = 0x80 | (0x1 & 0x0f);
+			// 	$length = strlen($text);
 				
-				if($length <= 125)
-					$header = pack('CC', $b1, $length);
-				elseif($length > 125 && $length < 65536)
-					$header = pack('CCn', $b1, 126, $length);
-				elseif($length >= 65536)
-					$header = pack('CCNN', $b1, 127, $length);
-				$response = $header.$text;
-			foreach($clients as $changed_socket)
-			{
-				@socket_write($changed_socket,$response,strlen($response));
-			}
+			// 	if($length <= 125)
+			// 		$header = pack('CC', $b1, $length);
+			// 	elseif($length > 125 && $length < 65536)
+			// 		$header = pack('CCn', $b1, 126, $length);
+			// 	elseif($length >= 65536)
+			// 		$header = pack('CCNN', $b1, 127, $length);
+			// 	$response = $header.$text;
+			// foreach($clients as $changed_socket)
+			// {
+			// 	@socket_write($changed_socket,$response,strlen($response));
+			// }
 
 		}
 	}
