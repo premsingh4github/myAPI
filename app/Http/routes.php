@@ -35,6 +35,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/getBranch','BranchController@index');
     Route::post('/createStock','StockController@create');
     Route::post('/getStocks','StockController@index');
+    Route::post('/creatProduct','ProductController@create');
+    Route::post('/getProducts','ProductController@index');
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');
