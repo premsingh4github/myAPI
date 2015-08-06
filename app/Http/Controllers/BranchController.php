@@ -35,6 +35,7 @@ class BranchController extends Controller
     public function create(Request $request)
     {
         $data = $request->only('branchName','branchLocation');
+        //return $data;
         $branch = new Branch;
         $branch->name = $data['branchName'];
         $branch->location = $data['branchLocation'];

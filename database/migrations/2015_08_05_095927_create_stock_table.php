@@ -17,6 +17,7 @@ class CreateStockTable extends Migration
                 $table->increments('id');
                 $table->integer('branchId');
                 $table->integer('productTypeId');
+                $table->string('lot');
                 $table->string('minQuantity');
                 $table->string('onlineQuantity');
                 $table->float('deliveryCharge');

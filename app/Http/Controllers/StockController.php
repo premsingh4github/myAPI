@@ -36,12 +36,11 @@ class StockController extends Controller
         //return $request['branchId'];
         $stock = new Stock;
         $stock->branchId = $request['branchId'];
-        // $stock->save();
-        // return $stock;
-        $stock->productTypeId = $request['productType'];
+        $stock->productTypeId = $request['productTypeId'];
         $stock->minQuantity = $request['minQuantity'];
         $stock->onlineQuantity = $request['onlineQuantity'];
         $stock->deliveryCharge = $request['deliveryCharge'];
+        $stock->lot = $request['lot'];
        
          if($stock->save()){
             $returnData = array(
