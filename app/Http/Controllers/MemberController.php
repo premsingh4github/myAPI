@@ -27,8 +27,13 @@ class MemberController extends Controller
     // }
     public function index()
     {   
-        $login = new Member;
-        return $login->getAllMember();
+        $members = Member::select('id','fname','mname','lname','mtype')->get();
+         $returnData = array(
+                'status' => 'ok',
+                'members' => $members,
+                'code' =>200
+            );
+            return $returnData ;
     }
 
     /**
@@ -134,7 +139,7 @@ class MemberController extends Controller
     }
     public function login(Request $request){
         $data = $request->only('username','password');
-        if(Auth::attempt($data)){
+        if(Auth::attempt($data) && Auth::user()->status == '1'){
             $login = new Login;
             $login->member_id = Auth::user()->id;
             $login->remember_token = str_random(15);;
@@ -146,6 +151,7 @@ class MemberController extends Controller
                     'status' => 'ok',
                     'message' => 'login success',
                     'token' => $login->remember_token,
+                    'id' =>  Auth::user()->id,
                     'code' =>200
                 );
             return Response::json($returnData, 200);

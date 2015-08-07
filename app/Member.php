@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 class Member extends Model implements AuthenticatableContract
 {
     //
-
+	//public static $hidden = array('password');
     use Authenticatable;
      public function getAllMember(){
     	$user = Member::select('id','fname','mname','lname')->where('status','=',1)->get();

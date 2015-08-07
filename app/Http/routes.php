@@ -25,7 +25,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
             $returnData = array(
                     'status' => 'ok',
                     'message' => 'logined',
-                    'code' => 200
+                    'code' => 200,
+                    'user' => Auth::user()->id
                 );
         return Response::json($returnData,200);
 	});
@@ -38,6 +39,7 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/creatProduct','ProductController@create');
     Route::post('/getProducts','ProductController@index');
     Route::post('/getMemberTypes','MemberController@getMemberType');
+    Route::post('/getMembers','MemberController@index');
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');
