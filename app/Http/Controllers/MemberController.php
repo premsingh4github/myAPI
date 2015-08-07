@@ -12,6 +12,7 @@ use Hash;
 use App\User;
 use Response;
 use App\Login;
+use App\MemberType;
 
 class MemberController extends Controller
 {
@@ -66,8 +67,23 @@ class MemberController extends Controller
         $member->status = "0";
         $member->mtype = "0";
         $member->password = Hash::make('password');
-        $member->save();
-        return $member->id;
+        if($member->save()){
+            $returnData = array(
+                    'status' => 'ok',
+                    'message' => 'Stock created',
+                    'member' => $member,
+                    'code' =>200
+                );
+            return Response::json($returnData, 200);
+        }
+        else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'member not created',
+                    'code' =>500
+                );
+            return Response::json($returnData, 200);
+        }
     }
 
     /**
@@ -410,6 +426,15 @@ class MemberController extends Controller
 
 
 
+    }
+    public function getMemberType(){
+        $MemberTypes = MemberType::all();
+             $returnData = array(
+                    'status' => 'ok',
+                    'memberTypes' => $MemberTypes,
+                    'code' =>200
+                );
+                return $returnData ;
     }
 
 }

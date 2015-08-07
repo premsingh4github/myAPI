@@ -28,7 +28,7 @@ class CreateMembersTable extends Migration
             $table->string('username');
             $table->string('password');
             $table->enum('status',['0','1','2']);
-            $table->enum('mtype',['0','1','2']);
+            $table->integer('mtype');
             $table->timestamps();
         });
     }
