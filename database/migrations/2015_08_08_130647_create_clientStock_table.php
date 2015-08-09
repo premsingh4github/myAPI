@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountTable extends Migration
+class CreateClientStockTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateAccountTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('accounts');
-        Schema::create('accounts',function(Blueprint $table){
+        Schema::dropIfExists('clientStocks');
+        Schema::create('clientStocks',function(Blueprint $table){
             $table->increments('id');
             $table->integer('memberId');
-            $table->integer('addedBy');
-            $table->enum('type',['0','1']);
-            $table->float('amount');
+            $table->integer('stockId');
+            $table->integer('amount');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateAccountTable extends Migration
      */
     public function down()
     {
-        Schema::drop('accounts');
+        Schema::drop('clientStocks');
     }
 }

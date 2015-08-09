@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class Account extends Controller
+class AccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class Account extends Controller
      */
     public function index()
     {
-        //
+        return "ok"
     }
 
     /**

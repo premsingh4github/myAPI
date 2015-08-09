@@ -7,6 +7,8 @@ use App\Stock;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Response;
+use App\Login;
+use App\ClientStock;
 
 class StockController extends Controller
 {
@@ -66,9 +68,21 @@ class StockController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
+        $clientStock = new ClientStock;
+        $clientStock->memberId = $login->member_id;
+        $clientStock->stockId = $request['stockId'];
+        $clientStock->amount = $request['amount'];
+        $clientStock->save();
+        $returnData = array(
+               'status' => 'ok',
+               'clientStock' => $clientStock,
+               'message' => "Your request completed successfully",
+               'code' =>200
+           );
+           return $returnData ;
     }
 
     /**

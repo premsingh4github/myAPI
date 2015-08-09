@@ -13,6 +13,7 @@ use App\User;
 use Response;
 use App\Login;
 use App\MemberType;
+use App\Account;
 
 class MemberController extends Controller
 {
@@ -25,12 +26,15 @@ class MemberController extends Controller
     // {
     //     $this->middleware('API', ['except' => 'getLogout']);
     // }
-    public function index()
+    public function index(Request $request)
     {   
-        $members = Member::select('id','fname','mname','lname','mtype')->get();
+        $members = Member::select('id','fname','mname','lname','mtype','username')->get();
+        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
+        
          $returnData = array(
                 'status' => 'ok',
                 'members' => $members,
+                'user' => $login->member_id,
                 'code' =>200
             );
             return $returnData ;
@@ -441,6 +445,23 @@ class MemberController extends Controller
                     'code' =>200
                 );
                 return $returnData ;
+    }
+    public function account(Request $request){
+        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
+        $account = new Account;
+        $account->addedBy = $login->member_id;
+        $account->memberId = $request['memberId'];
+        $account->amount = $request['amount'];
+        $account->type = $request['type'];
+        $account->save();
+        $returnData = array(
+               'status' => 'ok',
+               'account' => $account,
+               'message' => "Account updated Successfully",
+               'code' =>200
+           );
+           return $returnData ;
+
     }
 
 }
