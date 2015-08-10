@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\login;
 
 class AccountController extends Controller
 {
@@ -14,9 +15,32 @@ class AccountController extends Controller
      *
      * @return Response
      */
-    public function index()
-    {
-        return "ok"
+
+     public function __construct(Request $request){
+        return "ok";
+        $user = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
+        if($user->mtype != 3){
+            $returnData = array(
+                   'status' => 'fail',
+                   'mesage' => 'insufficient permision',
+                   'code' =>403
+               );
+               return $returnData ;
+        }
+
+     }
+    public function index(Request $request)
+    {   
+         $user = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
+        if($user->mtype != 3){
+            $returnData = array(
+                   'status' => 'fail',
+                   'mesage' => 'insufficient permision',
+                   'code' =>403
+               );
+               return $returnData ;
+        }
+        return $user;
     }
 
     /**

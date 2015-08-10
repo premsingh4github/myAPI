@@ -28,7 +28,7 @@ class MemberController extends Controller
     // }
     public function index(Request $request)
     {   
-        $members = Member::select('id','fname','mname','lname','mtype','username')->get();
+        $members = Member::select('id','fname','mname','lname','mtype','username')->where('status','=',1)->get();
         $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
         
          $returnData = array(
@@ -170,8 +170,15 @@ class MemberController extends Controller
         return $request->only('email','password');
 
     }
-    public function getUnverifiedMember(){
-        $members = Member::select('*')->where('status','=','0')->get();
+    public function getUnverifiedMember(Request $request){
+         $user = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
+        if($user->mtype == 1){
+            $members = Member::select('*')->where('status','=','0')->get();
+        }
+        else{
+            $members = [];
+        }
+        
         return Response::json(array(
                 'status' => 'ok',
                 'members'=> $members,
@@ -179,6 +186,15 @@ class MemberController extends Controller
             ));
     }
     public function verifyMember(Request $request){
+         $user = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
+        if($user->mtype != 1){
+            $returnData = array(
+                   'status' => 'fail',
+                   'mesage' => 'insufficient permision',
+                   'code' =>403
+               );
+               return $returnData ;
+        }
         $data = $request->only('member_id','username','password','mtype');
         $member = Member::find($data['member_id']);
         $member->username = $data['username'];
@@ -188,10 +204,12 @@ class MemberController extends Controller
 
         //return $member ;
         if($member->save()){
+            $new = Member::select('id','fname','mname','lname','mtype','username')->where('id','=',$member->id)->first();
             $returnData = array(
                     'status' => 'ok',
                     'message' => 'member verified',
-                    'code' =>200
+                    'code' =>200,
+                    'member' => $new
                 );
             return Response::json($returnData, 200);
         }
