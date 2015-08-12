@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientStockTable extends Migration
+class CreateAddProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,12 @@ class CreateClientStockTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('client_stocks');
-        Schema::create('client_stocks',function(Blueprint $table){
+        Schema::dropIfExists('add_products');
+        Schema::create('add_products',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('memberId');
             $table->integer('stockId');
-            $table->integer('amount');
-            $table->enum('status',['0','1']);
+            $table->float('quantity');
+            $table->integer('addedBy');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateClientStockTable extends Migration
      */
     public function down()
     {
-        Schema::drop('client_stocks');
+        Schema::drop('add_products');
     }
 }

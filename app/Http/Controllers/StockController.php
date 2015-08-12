@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Response;
 use App\Login;
 use App\ClientStock;
+use App\AddProduct;
 
 class StockController extends Controller
 {
@@ -17,12 +18,24 @@ class StockController extends Controller
      *
      * @return Response
      */
-    public function index()
+    
+    public function index(Request $request)
     {
+        $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         $stocks = Stock::all();
+        if($login->mtype == 1){
+            foreach ($stocks as $stock) {
+                $clientStocks = ClientStock::where('stockId','=',$stock->id)->where('status','=',0)->get();
+                $stock->request = $clientStocks;
+                $data[] = $stock; 
+            }
+        }
+        else{
+            $data = $stocks;
+        }
              $returnData = array(
                     'status' => 'ok',
-                    'stocks' => $stocks,
+                    'stocks' => $data,
                     'code' =>200
                 );
                 return $returnData ;
@@ -36,15 +49,21 @@ class StockController extends Controller
     public function create(Request $request)
     {
         //return $request['branchId'];
+        $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         $stock = new Stock;
         $stock->branchId = $request['branchId'];
         $stock->productTypeId = $request['productTypeId'];
-        $stock->minQuantity = $request['minQuantity'];
-        $stock->onlineQuantity = $request['onlineQuantity'];
-        $stock->deliveryCharge = $request['deliveryCharge'];
         $stock->lot = $request['lot'];
-       
+        $stock->minQuantity = ($request['minQuantity'] * $stock->lot);
+        $stock->onlineQuantity = ($request['onlineQuantity'] * $stock->lot);
+        $stock->deliveryCharge = $request['deliveryCharge'];
+        
          if($stock->save()){
+            $add_product = new AddProduct;
+            $add_product->stockId = $stock->id;
+            $add_product->quantity = ($stock->onlineQuantity * $stock->lot) + ($stock->minQuantity * $stock->lot) ;
+            $add_product->addedBy = $login->member_id;
+            $add_product->save();
             $returnData = array(
                     'status' => 'ok',
                     'message' => 'Stock created',
@@ -71,17 +90,30 @@ class StockController extends Controller
     public function store(Request $request)
     {
         $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
+        $stock = Stock::find($request['stockId']);
+        
         $clientStock = new ClientStock;
         $clientStock->memberId = $login->member_id;
         $clientStock->stockId = $request['stockId'];
-        $clientStock->amount = $request['amount'];
-        $clientStock->save();
-        $returnData = array(
-               'status' => 'ok',
-               'clientStock' => $clientStock,
-               'message' => "Your request completed successfully",
-               'code' =>200
-           );
+        $clientStock->amount = ($stock->lot * $request['amount']);
+        if($stock->onlineQuantity >= $clientStock->amount ){            
+            $clientStock->status = 0;
+            $clientStock->save();
+            $returnData = array(
+                   'status' => 'ok',
+                   'clientStock' => $clientStock,
+                   'message' => "Your request completed successfully",
+                   'code' =>200
+               );
+        }
+        else{
+            $returnData = array(
+                   'status' => 'fail',
+                   'message' => "Insufficient stock quantity",
+                   'code' =>400
+               );
+        }
+
            return $returnData ;
     }
 

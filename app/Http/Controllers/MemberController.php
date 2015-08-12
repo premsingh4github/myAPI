@@ -29,11 +29,46 @@ class MemberController extends Controller
     public function index(Request $request)
     {   
         $members = Member::select('id','fname','mname','lname','mtype','username')->where('status','=',1)->get();
-        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
-        
+        $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
+        if($login->mtype == 3){
+            foreach ($members as $member) {
+                $accounts = Account::where('memberId','=',$member->id)->get();
+                $amount = 0;
+                foreach ($accounts as $account) {
+                   if($account->type == 1){
+                        $amount += $account->amount;
+                   }
+                   else{
+                         $amount -= $account->amount;
+                   }
+                 
+                }
+                $member->amount = $amount; 
+                $user[] = $member;
+            }
+        }
+        else{
+             $user = $members;
+             foreach ($members as $member) {
+                if($member->id == $login->member_id){
+                    $accounts = Account::where('memberId','=',$member->id)->get();
+                    $amount = 0;
+                    foreach ($accounts as $account) {
+                       if($account->type == 1){
+                            $amount += $account->amount;
+                       }
+                       else{
+                             $amount -= $account->amount;
+                       }
+                    }
+                    $member->amount = $amount;
+                }                  
+                 $user[] = $member;
+             }
+        }
          $returnData = array(
                 'status' => 'ok',
-                'members' => $members,
+                'members' => $user,
                 'user' => $login->member_id,
                 'code' =>200
             );
@@ -476,7 +511,8 @@ class MemberController extends Controller
                'status' => 'ok',
                'account' => $account,
                'message' => "Account updated Successfully",
-               'code' =>200
+               'code' =>200,
+               'account' =>$account
            );
            return $returnData ;
 
