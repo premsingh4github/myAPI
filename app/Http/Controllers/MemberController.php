@@ -48,7 +48,7 @@ class MemberController extends Controller
             }
         }
         else{
-             $user = $members;
+             //$user = $members;
              foreach ($members as $member) {
                 if($member->id == $login->member_id){
                     $accounts = Account::where('memberId','=',$member->id)->get();

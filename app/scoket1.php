@@ -80,10 +80,11 @@ while (true) {
 			elseif($length >= 65536)
 				$header = pack('CCNN', $b1, 127, $length);
 			$response = $header.$text;
-		foreach($clients as $changed_socket)
-			{
-				@socket_write($changed_socket,$response,strlen($response));
-			}
+			// for informing all connected socket about new gest
+		// foreach($clients as $changed_socket)
+		// 	{
+		// 		@socket_write($changed_socket,$response,strlen($response));
+		// 	}
 		
 		//make room for new socket
 		$found_socket = array_search($socket, $changed);
@@ -154,13 +155,16 @@ while (true) {
 
 
 
-								foreach($clients as $changed_socket)
+								foreach($clients as $changed)
 								{
-									@socket_write($changed_socket,$response_text,strlen($response_text));
+									if($changed != $changed_socket){
+										@socket_write($changed,$response_text,strlen($response_text));
+									}
+									
 								}
-								foreach (array_keys($clientAllocation,$user_id) as $value) {
-				                               @socket_write($clients[$value],$response_text,strlen($response_text));
-				                           }
+								// foreach (array_keys($clientAllocation,$user_id) as $value) {
+				    //                            @socket_write($clients[$value],$response_text,strlen($response_text));
+				    //                        }
 			}
 			break 2; //exist this loop
 		}
