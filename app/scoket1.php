@@ -124,19 +124,22 @@ while (true) {
 
 
 			$tst_msg = json_decode($received_text); //json decode 
-			$user_id = $tst_msg->clientId; //sender name
+			
 			$type = $tst_msg->type; //message text
 			$data = $tst_msg->data; //color
 			$key = array_keys($changed, $changed_socket);
             $position = $key[0];
-			if(array_search($user_id,$clientAllocation)){
-			    if(array_search($user_id,$clientAllocation) != $position){
-			        $clientAllocation[$position] = $user_id;
-			    }
-			}
-			else{
-			    $clientAllocation[$position] = $user_id;
-			}
+            if(isset($tst_msg->clientId)){
+	            $user_id = $tst_msg->clientId; //sender name
+				if(array_search($user_id,$clientAllocation)){
+				    if(array_search($user_id,$clientAllocation) != $position){
+				        $clientAllocation[$position] = $user_id;
+				    }
+				}
+				else{
+				    $clientAllocation[$position] = $user_id;
+				}
+            }            
 			if($type == 'addMember'){
 							$text = json_encode(array('type'=>'addMember', 'clientId'=>$user_id, 'data'=>$data));
 								$b1 = 0x80 | (0x1 & 0x0f);
@@ -162,9 +165,30 @@ while (true) {
 									}
 									
 								}
-								// foreach (array_keys($clientAllocation,$user_id) as $value) {
-				    //                            @socket_write($clients[$value],$response_text,strlen($response_text));
-				    //                        }
+			}
+			elseif ($type == 'addUnverifiedMember') {
+				$text = json_encode(array('type'=>'addUnverifiedMember', 'data'=>$data));
+					$b1 = 0x80 | (0x1 & 0x0f);
+					$length = strlen($text);
+					
+					if($length <= 125)
+						$header = pack('CC', $b1, $length);
+					elseif($length > 125 && $length < 65536)
+						$header = pack('CCn', $b1, 126, $length);
+					elseif($length >= 65536)
+						$header = pack('CCNN', $b1, 127, $length);
+					$response_text = $header.$text;
+
+					foreach($clients as $changed)
+					{
+						if($changed != $changed_socket){
+							@socket_write($changed,$response_text,strlen($response_text));
+						}
+						
+					}
+			}
+			else{
+
 			}
 			break 2; //exist this loop
 		}

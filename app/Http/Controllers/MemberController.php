@@ -96,6 +96,7 @@ class MemberController extends Controller
     {
         $data = $request->only('fname','email','mname','lname','address','identity','nationality','dob','ban','cNumber','mNumber');
         //return $data;
+
         $member = new Member;
         $member->fname = $data['fname'];
         $member->mname = $data['mname'];
@@ -109,8 +110,11 @@ class MemberController extends Controller
         $member->cNumber = $data['cNumber'];
         $member->mNumber = $data['mNumber'];
         $member->status = "0";
-        $member->mtype = "0";
+        $member->mtype = 6;
         $member->password = Hash::make('password');
+        if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->where('mtype','=','7')->first()){
+            $member->agentId = $agent->id;
+        }
         if($member->save()){
             $returnData = array(
                     'status' => 'ok',
@@ -516,6 +520,46 @@ class MemberController extends Controller
            );
            return $returnData ;
 
+    }
+    public function addMember(Request $request){
+        $data = $request->only('fname','email','mname','lname','address','identity','nationality','dob','ban','cNumber','mNumber');
+        //return $data;
+
+        $member = new Member;
+        $member->fname = $data['fname'];
+        $member->mname = $data['mname'];
+        $member->lname = $data['lname'];
+        $member->email = $data['email'];
+        $member->address = $data['address'];
+        $member->identity = $data['identity'];
+        $member->nationality = $data['nationality'];
+        $member->dob = $data['dob'];
+        $member->ban = $data['ban'];
+        $member->cNumber = $data['cNumber'];
+        $member->mNumber = $data['mNumber'];
+        $member->status = "0";
+        $member->mtype = $request['mtype'];
+        $member->password = Hash::make('password');
+        if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->first()){
+            $member->agentId = $agent->id;
+        }
+        if($member->save()){
+            $returnData = array(
+                    'status' => 'ok',
+                    'message' => 'Stock created',
+                    'member' => $member,
+                    'code' =>200
+                );
+            return Response::json($returnData, 200);
+        }
+        else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'member not created',
+                    'code' =>500
+                );
+            return Response::json($returnData, 200);
+        }
     }
 
 }

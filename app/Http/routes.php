@@ -39,8 +39,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/getProducts','ProductController@index');
     Route::post('/getMemberTypes','MemberController@getMemberType');
     Route::post('/getMembers','MemberController@index');
-    
     Route::post('/addClientStock','StockController@store');
+    Route::post('/addMember','MemberController@addMember');
     Route::group(['middleware' => 'Account'],function(){
         Route::post('/addAccount','MemberController@account');
         Route::post('/getAccounts','AccountController@index');
