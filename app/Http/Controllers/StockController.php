@@ -21,6 +21,7 @@ class StockController extends Controller
     
     public function index(Request $request)
     {
+        
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         $stocks = Stock::all();
         if($login->mtype == 1){
@@ -145,9 +146,36 @@ class StockController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update(Request $request)
     {
-        //
+        $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->first();
+        
+        if($login->mtype < 6 ){
+
+            $add_product = new AddProduct;
+            $stock = Stock::find($request['stockId']);
+            $add_product->stockId = $request['stockId'];
+            $add_product->quantity = $request['quantity'] * $stock['lot'];
+            $add_product->addedBy = $login->member_id;
+            $add_product->save();
+            $stock->onlineQuantity += $add_product->quantity;
+            $stock->save();
+            $returnData = array(
+                    'status' => 'ok',
+                    'message' => 'Stock updatd successfully',
+                    'code' => 200,
+                    'stock' => $stock
+                    );
+        }
+        else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'Insufficient permission',
+                    'code' => 400
+                );
+        }
+       return $returnData;
+
     }
 
     /**
@@ -159,5 +187,26 @@ class StockController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function approveRequest(Request $request){
+        if($clientStock = ClientStock::find($request['requestId'])){
+            $clientStock->status = $request['status'];
+            if($clientStock->save()){
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'request approved successfully',
+                        'clientStock' => $clientStock,
+                        'code' =>200
+                    );
+            }
+        }
+        else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'invalid repquest',
+                    'code' => '400'
+                );
+        }
+        return $returnData; 
     }
 }

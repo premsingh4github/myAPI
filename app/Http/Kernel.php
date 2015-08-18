@@ -31,5 +31,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'API'   =>\App\Http\Middleware\APImiddelware::class,
         'Account' => Middleware\AccountMiddleware::class,
+        'deal' => Middleware\DealMiddleware::class,
     ];
 }

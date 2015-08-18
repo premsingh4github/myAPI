@@ -18,7 +18,7 @@ class CreateClientStockTable extends Migration
             $table->integer('memberId');
             $table->integer('stockId');
             $table->integer('amount');
-            $table->enum('status',['0','1']);
+            $table->enum('status',['0','1','2']); // 0 = pending, 1= aproved , 2= canceled
             $table->timestamps();
         });
     }

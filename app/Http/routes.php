@@ -45,6 +45,11 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
         Route::post('/addAccount','MemberController@account');
         Route::post('/getAccounts','AccountController@index');
     });
+    Route::post('/approveRequest','StockController@approveRequest');
+    Route::post('/updateStock','StockController@update');
+    // Route::group(['middleware' => 'deal'],function(){
+        
+    // });
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');
