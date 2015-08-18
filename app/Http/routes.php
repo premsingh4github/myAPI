@@ -50,6 +50,8 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     // Route::group(['middleware' => 'deal'],function(){
         
     // });
+    Route::post('/getNotices','NoticeController@index');
+    Route::post('/sendNotice','NoticeController@create');
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');

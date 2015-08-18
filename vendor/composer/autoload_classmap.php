@@ -13,6 +13,7 @@ return array(
     'CreateClientStockTable' => $baseDir . '/database/migrations/2015_08_08_130647_create_clientStock_table.php',
     'CreateLoginsTable' => $baseDir . '/database/migrations/2015_06_18_101927_create_logins_table.php',
     'CreateMembersTable' => $baseDir . '/database/migrations/2015_06_18_100716_create_members_table.php',
+    'CreateNoticeTable' => $baseDir . '/database/migrations/2015_08_18_161117_create_notice_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateProductTypeTable' => $baseDir . '/database/migrations/2015_08_06_095033_create_productType_table.php',
     'CreateStockTable' => $baseDir . '/database/migrations/2015_08_05_095927_create_stock_table.php',
