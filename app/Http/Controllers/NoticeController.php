@@ -36,10 +36,12 @@ class NoticeController extends Controller
      */
     public function create(Request $request)
     {
+        $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         $notice = new Notice;
         $notice->for = $request['for'];
         $notice->subject = $request['subject'];
         $notice->body = $request['body'];
+        $notice->sendBy = $login->member_id;
         if($notice->save()){
            $returnData = array(
                 'status' => 'ok',
