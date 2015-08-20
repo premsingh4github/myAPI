@@ -39,9 +39,7 @@ class BranchController extends Controller
         $branch = new Branch;
         $branch->name = $data['branchName'];
         $branch->location = $data['branchLocation'];
-        $timezone = "Asia/Kathmandu";
-        date_default_timezone_set($timezone);
-        $branch->created_at = date('Y-m-d H:i:s',time());
+        $branch->delivery_charge = $request['delivery_charge'];
 
          if($branch->save()){
             $returnData = array(

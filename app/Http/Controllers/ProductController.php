@@ -39,6 +39,7 @@ class ProductController extends Controller
                $product->commision = $request['commision'];
                $product->margin = $request['margin'];
                $product->lot_size = $request['lot_size'];
+               $product->holding_cost = $request['holding_cost'];
               
                 if($product->save()){
                    $returnData = array(

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.3
+-- version 4.2.11
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Aug 20, 2015 at 04:17 AM
--- Server version: 5.6.24
--- PHP Version: 5.6.8
+-- Host: 127.0.0.1
+-- Generation Time: Aug 20, 2015 at 02:16 PM
+-- Server version: 5.6.21
+-- PHP Version: 5.6.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,30 +27,23 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `accounts` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `memberId` int(11) NOT NULL,
   `addedBy` int(11) NOT NULL,
   `type` enum('0','1') COLLATE utf8_unicode_ci NOT NULL,
-  `amount` double(8,2) NOT NULL,
+  `amount` decimal(65,10) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `token_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `memberId`, `addedBy`, `type`, `amount`, `created_at`, `updated_at`) VALUES
-(4, 2, 11, '1', 100000.00, '2015-08-08 05:11:09', '2015-08-08 05:11:09'),
-(5, 1, 11, '0', 100.00, '2015-08-08 05:21:29', '2015-08-08 05:21:29'),
-(6, 2, 11, '0', 1.00, '2015-08-08 05:24:16', '2015-08-08 05:24:16'),
-(7, 10, 11, '1', 25000.00, '2015-08-11 11:48:15', '2015-08-11 11:48:15'),
-(8, 1, 11, '1', 100.00, '2015-08-12 05:35:06', '2015-08-12 05:35:06'),
-(9, 1, 11, '1', 100.00, '2015-08-12 05:44:38', '2015-08-12 05:44:38'),
-(10, 1, 11, '1', 50.00, '2015-08-12 05:46:59', '2015-08-12 05:46:59'),
-(11, 1, 11, '1', 100.00, '2015-08-12 05:50:56', '2015-08-12 05:50:56'),
-(12, 1, 11, '0', 100.00, '2015-08-12 05:51:06', '2015-08-12 05:51:06'),
-(14, 1, 11, '1', 999999.99, '2015-08-16 12:42:25', '2015-08-16 12:42:25');
+INSERT INTO `accounts` (`id`, `memberId`, `addedBy`, `type`, `amount`, `created_at`, `updated_at`, `token_id`) VALUES
+(1, 10, 11, '1', '25000000.0000000000', '2015-08-20 11:52:47', '2015-08-20 11:52:47', NULL),
+(3, 10, 0, '0', '310000.0000000000', '2015-08-20 12:10:09', '2015-08-20 12:10:09', 6);
 
 -- --------------------------------------------------------
 
@@ -59,23 +52,20 @@ INSERT INTO `accounts` (`id`, `memberId`, `addedBy`, `type`, `amount`, `created_
 --
 
 CREATE TABLE IF NOT EXISTS `add_products` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `stockId` int(11) NOT NULL,
   `quantity` double(8,2) NOT NULL,
   `addedBy` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `add_products`
 --
 
 INSERT INTO `add_products` (`id`, `stockId`, `quantity`, `addedBy`, `created_at`, `updated_at`) VALUES
-(5, 23, 1200.00, 1, '2015-08-12 11:22:32', '2015-08-12 11:22:32'),
-(6, 24, 2200.00, 1, '2015-08-12 11:23:28', '2015-08-12 11:23:28'),
-(14, 24, 200.00, 1, '2015-08-15 16:25:55', '2015-08-15 16:25:55'),
-(15, 24, 200.00, 1, '2015-08-15 17:09:28', '2015-08-15 17:09:28');
+(2, 26, 60000.00, 1, '2015-08-20 06:49:52', '2015-08-20 06:49:52');
 
 -- --------------------------------------------------------
 
@@ -84,22 +74,20 @@ INSERT INTO `add_products` (`id`, `stockId`, `quantity`, `addedBy`, `created_at`
 --
 
 CREATE TABLE IF NOT EXISTS `branches` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `delivery_charge` float NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `branches`
 --
 
-INSERT INTO `branches` (`id`, `name`, `location`, `created_at`, `updated_at`) VALUES
-(44, 'ktm', 'ktm', '2015-08-05 17:07:51', '0000-00-00 00:00:00'),
-(45, 'prem', 'ktm', '2015-08-05 17:09:16', '0000-00-00 00:00:00'),
-(46, 'ktm12', 'ktm', '2015-08-05 17:11:04', '0000-00-00 00:00:00'),
-(47, 'laitpur', 'lalitpur', '2015-08-05 17:20:11', '0000-00-00 00:00:00');
+INSERT INTO `branches` (`id`, `name`, `location`, `delivery_charge`, `created_at`, `updated_at`) VALUES
+(50, 'KTM', 'Kritipur', 100, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -108,23 +96,22 @@ INSERT INTO `branches` (`id`, `name`, `location`, `created_at`, `updated_at`) VA
 --
 
 CREATE TABLE IF NOT EXISTS `client_stocks` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `memberId` int(11) NOT NULL,
   `stockId` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   `status` enum('0','1','2') COLLATE utf8_unicode_ci NOT NULL,
+  `cost` decimal(65,10) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `client_stocks`
 --
 
-INSERT INTO `client_stocks` (`id`, `memberId`, `stockId`, `amount`, `status`, `created_at`, `updated_at`) VALUES
-(3, 10, 23, 200, '1', '2015-08-12 09:48:09', '2015-08-15 15:11:50'),
-(4, 10, 24, 150, '0', '2015-08-12 09:51:31', '2015-08-15 14:12:12'),
-(5, 10, 23, 300, '1', '2015-08-16 12:38:32', '2015-08-16 12:40:35');
+INSERT INTO `client_stocks` (`id`, `memberId`, `stockId`, `amount`, `status`, `cost`, `created_at`, `updated_at`) VALUES
+(6, 10, 26, 1000, '0', '310000.0000000000', '2015-08-20 12:10:09', '2015-08-20 12:10:09');
 
 -- --------------------------------------------------------
 
@@ -133,22 +120,28 @@ INSERT INTO `client_stocks` (`id`, `memberId`, `stockId`, `amount`, `status`, `c
 --
 
 CREATE TABLE IF NOT EXISTS `logins` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `member_id` int(10) unsigned NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL,
   `login_from` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `logins`
 --
 
 INSERT INTO `logins` (`id`, `member_id`, `remember_token`, `status`, `login_from`, `created_at`, `updated_at`) VALUES
-(3, 1, 'UT33841cAs1gTdw', '1', '::1', '2015-08-20 02:03:34', '2015-08-20 02:03:34'),
-(4, 1, 'AXlymVJVnj36sBC', '1', '::1', '2015-08-20 02:03:50', '2015-08-20 02:03:50');
+(5, 1, 'bslno8HTPRRL0Um', '1', '::1', '2015-08-20 04:39:51', '2015-08-20 04:39:51'),
+(6, 1, 'olVWyd1l5G24uJs', '0', '::1', '2015-08-20 04:49:46', '2015-08-20 11:48:29'),
+(7, 1, 'eMSCHkYQui4RLdP', '0', '::1', '2015-08-20 04:51:40', '2015-08-20 08:10:39'),
+(8, 10, 'VH56dzbBVFIUcrv', '1', '::1', '2015-08-20 08:10:47', '2015-08-20 08:10:47'),
+(9, 11, 'nV5Ip7nkIKW8i8a', '0', '::1', '2015-08-20 11:48:44', '2015-08-20 11:49:13'),
+(10, 1, 'NyzCuC6CPLJYUT7', '0', '::1', '2015-08-20 11:49:19', '2015-08-20 11:51:59'),
+(11, 11, 'BRlUpRHnJ5cIfRm', '0', '::1', '2015-08-20 11:52:07', '2015-08-20 12:08:15'),
+(12, 1, 'xETwmdyg0ZUCFwD', '1', '::1', '2015-08-20 12:08:20', '2015-08-20 12:08:20');
 
 -- --------------------------------------------------------
 
@@ -288,26 +281,24 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 --
 
 CREATE TABLE IF NOT EXISTS `products` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `commision` float DEFAULT NULL,
   `margin` float DEFAULT NULL,
-  `lot_size` float DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `lot_size` float DEFAULT NULL,
+  `holding_cost` float DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `created_at`, `updated_at`, `commision`, `margin`, `lot_size`) VALUES
-(7, 'diamond', '2015-08-20 01:22:27', '2015-08-20 01:22:27', 1000, 5000, 10),
-(13, 'Gold', '2015-08-20 01:24:31', '2015-08-20 01:24:31', 1000, 5000, 10),
-(14, 'Silver', '2015-08-20 01:24:43', '2015-08-20 01:24:43', 1000, 5000, 10),
-(15, 'blood', '2015-08-20 02:04:16', '2015-08-20 02:04:16', 100, 200, 100),
-(16, 'sdsdsdsds', '2015-08-20 02:05:27', '2015-08-20 02:05:27', 100, 200, 100),
-(17, 'test89', '2015-08-20 02:07:57', '2015-08-20 02:07:57', 12, 34, 12);
+INSERT INTO `products` (`id`, `name`, `created_at`, `updated_at`, `commision`, `margin`, `lot_size`, `holding_cost`) VALUES
+(18, 'diamond', '2015-08-20 06:42:58', '2015-08-20 06:42:58', 1000, 2000, 10, 50),
+(19, 'Gold', '2015-08-20 06:43:33', '2015-08-20 06:43:33', 1000, 2000, 10, 50),
+(20, 'Silver', '2015-08-20 06:44:53', '2015-08-20 06:44:53', 1000, 2000, 10, 50);
 
 -- --------------------------------------------------------
 
@@ -316,24 +307,21 @@ INSERT INTO `products` (`id`, `name`, `created_at`, `updated_at`, `commision`, `
 --
 
 CREATE TABLE IF NOT EXISTS `stocks` (
-  `id` int(10) unsigned NOT NULL,
+`id` int(10) unsigned NOT NULL,
   `branchId` int(11) NOT NULL,
   `productTypeId` int(11) NOT NULL,
   `minQuantity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `onlineQuantity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `deliveryCharge` double(8,2) NOT NULL,
-  `lot` varchar(55) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `stocks`
 --
 
-INSERT INTO `stocks` (`id`, `branchId`, `productTypeId`, `minQuantity`, `onlineQuantity`, `deliveryCharge`, `lot`, `created_at`, `updated_at`) VALUES
-(23, 44, 2, '200', '400', 500.00, '2', '2015-08-12 11:22:32', '2015-08-12 11:22:32'),
-(24, 46, 3, '100', '2400', 500.00, '2', '2015-08-12 11:23:28', '2015-08-15 17:09:28');
+INSERT INTO `stocks` (`id`, `branchId`, `productTypeId`, `minQuantity`, `onlineQuantity`, `created_at`, `updated_at`) VALUES
+(26, 50, 18, '1000', '5000', '2015-08-20 06:49:52', '2015-08-20 06:49:52');
 
 -- --------------------------------------------------------
 
@@ -359,67 +347,95 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `add_products`
 --
 ALTER TABLE `add_products`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `branches`
 --
 ALTER TABLE `branches`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `branches_name_unique` (`name`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `branches_name_unique` (`name`);
 
 --
 -- Indexes for table `client_stocks`
 --
 ALTER TABLE `client_stocks`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `logins`
 --
 ALTER TABLE `logins`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `logins_member_id_foreign` (`member_id`);
+ ADD PRIMARY KEY (`id`), ADD KEY `logins_member_id_foreign` (`member_id`);
 
 --
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `member_type`
 --
 ALTER TABLE `member_type`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `stocks`
+--
+ALTER TABLE `stocks`
+ ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
+-- AUTO_INCREMENT for table `accounts`
+--
+ALTER TABLE `accounts`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `add_products`
+--
+ALTER TABLE `add_products`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `branches`
+--
+ALTER TABLE `branches`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
+--
+-- AUTO_INCREMENT for table `client_stocks`
+--
+ALTER TABLE `client_stocks`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+--
+-- AUTO_INCREMENT for table `stocks`
+--
+ALTER TABLE `stocks`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -229,6 +229,27 @@ while (true) {
 						
 					}
 			}
+			elseif ($type == 'addBranch') {
+				$text = json_encode(array('type'=>'addBranch', 'data'=>$data));
+				$b1 = 0x80 | (0x1 & 0x0f);
+				$length = strlen($text);
+				
+				if($length <= 125)
+					$header = pack('CC', $b1, $length);
+				elseif($length > 125 && $length < 65536)
+					$header = pack('CCn', $b1, 126, $length);
+				elseif($length >= 65536)
+					$header = pack('CCNN', $b1, 127, $length);
+				$response_text = $header.$text;
+
+				foreach($clients as $changed)
+				{
+					if($changed != $changed_socket){
+						@socket_write($changed,$response_text,strlen($response_text));
+					}
+					
+				}
+			}
 			else{
 
 			}
