@@ -182,6 +182,7 @@ class MemberController extends Controller
     }
     public function login(Request $request){
         $data = $request->only('username','password');
+
         if(Auth::attempt($data) && Auth::user()->status == '1'){
             $login = new Login;
             $login->member_id = Auth::user()->id;
@@ -197,6 +198,7 @@ class MemberController extends Controller
                     'id' =>  Auth::user()->id,
                     'code' =>200
                 );
+
             return Response::json($returnData, 200);
         }else{
             $returnData = array(
