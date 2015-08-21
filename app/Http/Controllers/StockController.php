@@ -111,6 +111,7 @@ class StockController extends Controller
         $clientStock->stockId = $request['stockId'];
         $clientStock->amount = ($productType->lot_size * $request['amount']);
         $clientStock->status = 0;
+        $clientStock->delivery_date = $request['delivery_date'];
         if($account->getAccount($login->member_id) < $cost){
             $returnData = array(
                    'status' => 'fail',

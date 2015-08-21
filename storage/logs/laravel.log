@@ -13618,3 +13618,69 @@ Stack trace:
 #56 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1985): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
 #57 D:\xamp\htdocs\dealerAPI\public\index.php(55): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
 #58 {main}  
+[2015-08-21 16:09:08] local.ERROR: exception 'RuntimeException' with message 'No supported encrypter found. The cipher and / or key length are invalid.' in D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php:6912
+Stack trace:
+#0 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1057): Illuminate\Encryption\EncryptionServiceProvider->Illuminate\Encryption\{closure}(Object(Illuminate\Foundation\Application), Array)
+#1 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build(Object(Closure), Array)
+#2 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('encrypter', Array)
+#3 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1102): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#4 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1086): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#5 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1072): Illuminate\Container\Container->getDependencies(Array, Array)
+#6 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build('App\\Http\\Middle...', Array)
+#7 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('App\\Http\\Middle...', Array)
+#8 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9401): Illuminate\Foundation\Application->make('App\\Http\\Middle...')
+#9 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(2659): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#10 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#11 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9401): call_user_func_array(Array, Array)
+#12 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#13 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9391): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1999): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#15 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1985): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#16 D:\xamp\htdocs\dealerAPI\public\index.php(55): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#17 {main}  
+[2015-08-21 16:09:08] local.ERROR: exception 'RuntimeException' with message 'No supported encrypter found. The cipher and / or key length are invalid.' in D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php:6912
+Stack trace:
+#0 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1057): Illuminate\Encryption\EncryptionServiceProvider->Illuminate\Encryption\{closure}(Object(Illuminate\Foundation\Application), Array)
+#1 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build(Object(Closure), Array)
+#2 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('encrypter', Array)
+#3 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1102): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#4 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1086): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#5 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1072): Illuminate\Container\Container->getDependencies(Array, Array)
+#6 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build('App\\Http\\Middle...', Array)
+#7 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('App\\Http\\Middle...', Array)
+#8 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(2006): Illuminate\Foundation\Application->make('App\\Http\\Middle...')
+#9 D:\xamp\htdocs\dealerAPI\public\index.php(59): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\Response))
+#10 {main}  
+[2015-08-21 16:09:25] local.ERROR: exception 'RuntimeException' with message 'No supported encrypter found. The cipher and / or key length are invalid.' in D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php:6912
+Stack trace:
+#0 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1057): Illuminate\Encryption\EncryptionServiceProvider->Illuminate\Encryption\{closure}(Object(Illuminate\Foundation\Application), Array)
+#1 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build(Object(Closure), Array)
+#2 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('encrypter', Array)
+#3 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1102): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#4 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1086): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#5 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1072): Illuminate\Container\Container->getDependencies(Array, Array)
+#6 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build('App\\Http\\Middle...', Array)
+#7 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('App\\Http\\Middle...', Array)
+#8 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9401): Illuminate\Foundation\Application->make('App\\Http\\Middle...')
+#9 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(2659): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#10 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#11 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9401): call_user_func_array(Array, Array)
+#12 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#13 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(9391): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1999): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#15 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1985): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#16 D:\xamp\htdocs\dealerAPI\public\index.php(55): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#17 {main}  
+[2015-08-21 16:09:25] local.ERROR: exception 'RuntimeException' with message 'No supported encrypter found. The cipher and / or key length are invalid.' in D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php:6912
+Stack trace:
+#0 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1057): Illuminate\Encryption\EncryptionServiceProvider->Illuminate\Encryption\{closure}(Object(Illuminate\Foundation\Application), Array)
+#1 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build(Object(Closure), Array)
+#2 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('encrypter', Array)
+#3 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1102): Illuminate\Foundation\Application->make('Illuminate\\Cont...')
+#4 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1086): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#5 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1072): Illuminate\Container\Container->getDependencies(Array, Array)
+#6 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1010): Illuminate\Container\Container->build('App\\Http\\Middle...', Array)
+#7 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(1537): Illuminate\Container\Container->make('App\\Http\\Middle...', Array)
+#8 D:\xamp\htdocs\dealerAPI\bootstrap\cache\compiled.php(2006): Illuminate\Foundation\Application->make('App\\Http\\Middle...')
+#9 D:\xamp\htdocs\dealerAPI\public\index.php(59): Illuminate\Foundation\Http\Kernel->terminate(Object(Illuminate\Http\Request), Object(Illuminate\Http\Response))
+#10 {main}  
