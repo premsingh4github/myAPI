@@ -220,15 +220,38 @@ class StockController extends Controller
     }
     public function approveRequest(Request $request){
         if($clientStock = ClientStock::find($request['requestId'])){
-            $clientStock->status = $request['status'];
-            if($clientStock->save()){
+            if($request['status'] == 1){
+                $clientStock->status = $request['status'];
+                if($clientStock->save()){
+                    $stock = Stock::find($clientStock->stockId);
+                    $stock->onlineQuantity -= $clientStock->amount;
+                    $returnData = array(
+                            'status' => 'ok',
+                            'message' => 'request approved successfully',
+                            'clientStock' => $clientStock,
+                            'code' =>200
+                        );
+                }
+            }
+            else{
+                $clientStock->status = 2;
+                $clientStock->save();
+                $account = new Account;
+                $account->memberId = $clientStock->memberId;
+                $account->token_id = $clientStock->id;
+                $account->type = 1;
+                $account->amount = $clientStock->cost;
+                $account->addedBy = 0;
+                $account->save();
                 $returnData = array(
                         'status' => 'ok',
-                        'message' => 'request approved successfully',
+                        'message' => 'request rejected successfully',
                         'clientStock' => $clientStock,
                         'code' =>200
                     );
+
             }
+            
         }
         else{
             $returnData = array(

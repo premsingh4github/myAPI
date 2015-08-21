@@ -30,7 +30,7 @@ class MemberController extends Controller
     {   
         $members = Member::select('id','fname','mname','lname','mtype','username')->where('status','=',1)->get();
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
-        if($login->mtype == 3){
+        if($login->mtype == 3 || $login->mtype == 1){
             foreach ($members as $member) {
                 $accounts = Account::where('memberId','=',$member->id)->get();
                 $amount = 0;
