@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.4.3
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 21, 2015 at 02:14 PM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Host: localhost
+-- Generation Time: Aug 24, 2015 at 04:27 AM
+-- Server version: 5.6.24
+-- PHP Version: 5.6.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `accounts` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `memberId` int(11) NOT NULL,
   `addedBy` int(11) NOT NULL,
   `type` enum('0','1') COLLATE utf8_unicode_ci NOT NULL,
@@ -59,20 +59,24 @@ INSERT INTO `accounts` (`id`, `memberId`, `addedBy`, `type`, `amount`, `created_
 --
 
 CREATE TABLE IF NOT EXISTS `add_products` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `stockId` int(11) NOT NULL,
   `quantity` double(8,2) NOT NULL,
   `addedBy` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `add_products`
 --
 
 INSERT INTO `add_products` (`id`, `stockId`, `quantity`, `addedBy`, `created_at`, `updated_at`) VALUES
-(2, 26, 60000.00, 1, '2015-08-20 06:49:52', '2015-08-20 06:49:52');
+(2, 26, 60000.00, 1, '2015-08-20 06:49:52', '2015-08-20 06:49:52'),
+(3, 27, 25000.00, 1, '2015-08-22 08:17:15', '2015-08-22 08:17:15'),
+(4, 28, 30000.00, 1, '2015-08-23 08:14:46', '2015-08-23 08:14:46'),
+(5, 28, 50000.00, 1, '2015-08-23 08:15:23', '2015-08-23 08:15:23'),
+(6, 28, 50000.00, 1, '2015-08-23 08:15:25', '2015-08-23 08:15:25');
 
 -- --------------------------------------------------------
 
@@ -81,20 +85,21 @@ INSERT INTO `add_products` (`id`, `stockId`, `quantity`, `addedBy`, `created_at`
 --
 
 CREATE TABLE IF NOT EXISTS `branches` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `delivery_charge` float NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `branches`
 --
 
 INSERT INTO `branches` (`id`, `name`, `location`, `delivery_charge`, `created_at`, `updated_at`) VALUES
-(50, 'KTM', 'Kritipur', 100, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(50, 'KTM', 'Kritipur', 100, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(51, 'Lalitpur', 'kupondole', 1000, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -103,7 +108,7 @@ INSERT INTO `branches` (`id`, `name`, `location`, `delivery_charge`, `created_at
 --
 
 CREATE TABLE IF NOT EXISTS `client_stocks` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `memberId` int(11) NOT NULL,
   `stockId` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
@@ -121,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `client_stocks` (
 INSERT INTO `client_stocks` (`id`, `memberId`, `stockId`, `amount`, `status`, `cost`, `delivery_date`, `created_at`, `updated_at`) VALUES
 (6, 10, 26, 1000, '2', '310000.0000000000', '0000-00-00 00:00:00', '2015-08-20 12:10:09', '2015-08-20 17:05:32'),
 (7, 10, 26, 1000, '2', '310000.0000000000', '0000-00-00 00:00:00', '2015-08-20 17:56:19', '2015-08-20 18:05:26'),
-(8, 10, 26, 1000, '0', '310000.0000000000', '0000-00-00 00:00:00', '2015-08-20 18:06:17', '2015-08-20 18:06:17'),
+(8, 10, 26, 1000, '1', '310000.0000000000', '0000-00-00 00:00:00', '2015-08-20 18:06:17', '2015-08-22 04:16:19'),
 (9, 10, 26, 1000, '0', '310000.0000000000', '0000-00-00 00:00:00', '2015-08-20 18:06:17', '2015-08-20 18:06:17'),
 (11, 10, 26, 500, '0', '155000.0000000000', '1970-01-01 00:00:00', '2015-08-21 11:16:23', '2015-08-21 11:16:23'),
 (12, 10, 26, 1000, '0', '310000.0000000000', '2015-21-08', '2015-08-21 11:22:13', '2015-08-21 11:22:13');
@@ -133,14 +138,14 @@ INSERT INTO `client_stocks` (`id`, `memberId`, `stockId`, `amount`, `status`, `c
 --
 
 CREATE TABLE IF NOT EXISTS `logins` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `member_id` int(10) unsigned NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` enum('1','0') COLLATE utf8_unicode_ci NOT NULL,
   `login_from` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `logins`
@@ -156,11 +161,17 @@ INSERT INTO `logins` (`id`, `member_id`, `remember_token`, `status`, `login_from
 (11, 11, 'BRlUpRHnJ5cIfRm', '0', '::1', '2015-08-20 11:52:07', '2015-08-20 12:08:15'),
 (12, 1, 'xETwmdyg0ZUCFwD', '1', '::1', '2015-08-20 12:08:20', '2015-08-20 12:08:20'),
 (13, 1, 'tNjz2gPVb1a5FFP', '0', '::1', '2015-08-20 16:03:21', '2015-08-20 16:06:21'),
-(14, 1, 'rnypKziFLebam3g', '1', '::1', '2015-08-20 16:06:48', '2015-08-20 16:06:48'),
+(14, 1, 'rnypKziFLebam3g', '0', '::1', '2015-08-20 16:06:48', '2015-08-23 07:05:26'),
 (15, 10, '3x4A0knyMdsW4ar', '1', '::1', '2015-08-20 16:07:30', '2015-08-20 16:07:30'),
-(16, 10, 'rdceV7zA3WihQ1J', '1', '::1', '2015-08-21 01:45:37', '2015-08-21 01:45:37'),
+(16, 10, 'rdceV7zA3WihQ1J', '0', '::1', '2015-08-21 01:45:37', '2015-08-21 16:59:16'),
 (17, 10, 'MFocrifevp3pkbz', '1', '::1', '2015-08-21 01:51:23', '2015-08-21 01:51:23'),
-(18, 10, '2zaUEYdVb9Uigdt', '1', '::1', '2015-08-21 10:24:36', '2015-08-21 10:24:36');
+(18, 10, '2zaUEYdVb9Uigdt', '1', '::1', '2015-08-21 10:24:36', '2015-08-21 10:24:36'),
+(19, 10, 'WVYSBpLXQlJpvwf', '1', '::1', '2015-08-21 17:01:28', '2015-08-21 17:01:28'),
+(20, 10, 'Lh9VhGSc4hQPXuC', '1', '::1', '2015-08-22 04:20:15', '2015-08-22 04:20:15'),
+(21, 10, 'cx3ShFYF7E3fHZQ', '1', '::1', '2015-08-23 06:56:52', '2015-08-23 06:56:52'),
+(22, 10, 'gM2OjGJnN6kKYgj', '0', '::1', '2015-08-23 07:05:34', '2015-08-23 07:52:46'),
+(23, 1, 'ApN4eX8AZ4LhNC2', '0', '::1', '2015-08-23 07:53:10', '2015-08-23 08:34:03'),
+(24, 10, 'g3Pb7oUVf806mH8', '1', '::1', '2015-08-23 08:34:17', '2015-08-23 08:34:17');
 
 -- --------------------------------------------------------
 
@@ -198,7 +209,7 @@ INSERT INTO `members` (`id`, `fname`, `mname`, `lname`, `address`, `identity`, `
 (1, 'prem', 'kumar', 'singh', 'ktm', '1235', 'nepales', '', '', '', '', '', 'admin', '$2y$10$LpA28z1z2ti3d2bMyUB5zuvWKcFPwon1cW2TS/gyA/iP0ntAct.0q', '1', 1, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 'sulav', 'k', 'kafle', 'balkhu', '1234', 'nepales', '1992', '1424', 'sulav@test.com', '9804835317', '980', 'bank', '$2y$10$Ve2eaANY4oia69e9PDdMtOCohh.MiKAYwQChas5oNes3XpgZS9HHi', '1', 0, NULL, '2015-08-05 20:28:50', '2015-08-05 20:34:24'),
 (3, 'suraj', '', 'sh', 'ktm', '1234', 'nepales', '1986', '1234', 'suraj@test.com', '987', '980', 'jhjh', '$2y$10$MTOfr2d8OGLPGQ7beXAWJulgz1AdExmJMtP.oh99nyTbIOaxDP08K', '0', 5, NULL, '2015-08-06 11:34:39', '2015-08-17 15:44:14'),
-(10, 'sulav', 'python', 'safle', 'ktm', '123', 'ne', '1992', '123', 'sulav@test.com', '987', '987', 'client', '$2y$10$saZe/VMazuxbzsuZ7xL/5.SdAnD/JLmZApXxxV9BLLr2Tb.h34ddG', '1', 6, NULL, '2015-08-07 09:14:26', '2015-08-07 10:12:19'),
+(10, 'sulav', 'python', 'kafle', 'ktm', '123', 'ne', '1992', '123', 'sulav@test.com', '987', '987', 'client', '$2y$10$saZe/VMazuxbzsuZ7xL/5.SdAnD/JLmZApXxxV9BLLr2Tb.h34ddG', '1', 6, NULL, '2015-08-07 09:14:26', '2015-08-07 10:12:19'),
 (11, 'Amrit', 'ku', 'pant', 'ktm', '1234', 'nepales', '1986', '1234', 'amrit@test.com', '987', '986', 'account', '$2y$10$ux8ib5WoczRhp7xSoej8JO8QWpc/XcAhgwmzEHMaKk7MLmZeIVPUi', '1', 3, NULL, '2015-08-08 03:10:18', '2015-08-08 03:10:58'),
 (81, 'test', 'k', 'kjk', 'kjkj', 'kjk', 'jkjk', 'jkjk', 'kjkjk', 'kjkj@test.com', '987', '987', '', '$2y$10$rf6CjU3abJODCLV0Q1n69.pWUpP4dLjakQcn63E7zzrAihYVC7yAq', '0', 6, 82, '2015-08-18 05:20:14', '2015-08-18 05:20:14'),
 (82, 'agent', 'k', 'test', 'test', '1234', 'nepales', '1989', '1234', 'agent@test.com', '987', '980', 'agent', '$2y$10$5hRfxVAVZDQqBI7dI2i/BeSb3NFUhwa/.CmE7ak6OlBoDlRcNUxMG', '1', 7, NULL, '2015-08-18 05:27:44', '2015-08-18 05:37:00');
@@ -300,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 --
 
 CREATE TABLE IF NOT EXISTS `products` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -326,21 +337,23 @@ INSERT INTO `products` (`id`, `name`, `created_at`, `updated_at`, `commision`, `
 --
 
 CREATE TABLE IF NOT EXISTS `stocks` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `branchId` int(11) NOT NULL,
   `productTypeId` int(11) NOT NULL,
   `minQuantity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `onlineQuantity` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `stocks`
 --
 
 INSERT INTO `stocks` (`id`, `branchId`, `productTypeId`, `minQuantity`, `onlineQuantity`, `created_at`, `updated_at`) VALUES
-(26, 50, 18, '1000', '5000', '2015-08-20 06:49:52', '2015-08-20 06:49:52');
+(26, 50, 18, '1000', '5000', '2015-08-20 06:49:52', '2015-08-20 06:49:52'),
+(27, 51, 19, '500', '2000', '2015-08-22 08:17:15', '2015-08-22 08:17:15'),
+(28, 50, 20, '1000', '102000', '2015-08-23 08:14:46', '2015-08-23 08:15:25');
 
 -- --------------------------------------------------------
 
@@ -366,55 +379,58 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `add_products`
 --
 ALTER TABLE `add_products`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `branches`
 --
 ALTER TABLE `branches`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `branches_name_unique` (`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `branches_name_unique` (`name`);
 
 --
 -- Indexes for table `client_stocks`
 --
 ALTER TABLE `client_stocks`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `logins`
 --
 ALTER TABLE `logins`
- ADD PRIMARY KEY (`id`), ADD KEY `logins_member_id_foreign` (`member_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `logins_member_id_foreign` (`member_id`);
 
 --
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `member_type`
 --
 ALTER TABLE `member_type`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `stocks`
 --
 ALTER TABLE `stocks`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -424,37 +440,37 @@ ALTER TABLE `stocks`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `add_products`
 --
 ALTER TABLE `add_products`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `branches`
 --
 ALTER TABLE `branches`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `client_stocks`
 --
 ALTER TABLE `client_stocks`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `stocks`
 --
 ALTER TABLE `stocks`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
