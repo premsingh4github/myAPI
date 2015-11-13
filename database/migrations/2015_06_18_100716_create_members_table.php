@@ -26,6 +26,7 @@ class CreateMembersTable extends Migration
             $table->string('cNumber');
             $table->string('mNumber');
             $table->string('username');
+            $table->unique('username');
             $table->string('password');
             $table->enum('status',['0','1','2']);
             $table->integer('mtype');
