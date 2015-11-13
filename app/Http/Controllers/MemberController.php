@@ -182,7 +182,6 @@ class MemberController extends Controller
     }
     public function login(Request $request){
         $data = $request->only('username','password');
-
         if(Auth::attempt($data) && Auth::user()->status == '1'){
             $login = new Login;
             $login->member_id = Auth::user()->id;
@@ -203,13 +202,11 @@ class MemberController extends Controller
         }else{
             $returnData = array(
                     'status' => 'fail',
-                    'message' => 'invalid credential',
-                    'code' => 500
+                    'message' => 'invalid credential'
                 );
-            return Response::json($returnData, 500);
+            return Response::json($returnData, 401);
         }
-        return $request->only('email','password');
-
+      
     }
     public function getUnverifiedMember(Request $request){
          $user = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();

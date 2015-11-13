@@ -1,5 +1,7 @@
 <?php
-
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Methods :POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers : X-Requested-With, content-type,token');
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -18,18 +20,18 @@ Route::get('index','MemberController@index');
 Route::post('register','MemberController@store');
 Route::post('login','MemberController@login');
 Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
-	Route::post('/','MemberController@create');
-	Route::post('/getUnverifiedMember','MemberController@getUnverifiedMember');
-	Route::post('/verifyMember','MemberController@verifyMember');
-	Route::post('/isAuthed',function(){
+    Route::post('/','MemberController@create');
+    Route::post('/getUnverifiedMember','MemberController@getUnverifiedMember');
+    Route::post('/verifyMember','MemberController@verifyMember');
+    Route::post('/isAuthed',function(){
             $returnData = array(
                     'status' => 'ok',
                     'message' => 'logined',
                     'code' => 200
                 );
         return Response::json($returnData,200);
-	});
-	Route::post('/getOnlineMember','MemberController@getOnlineMember');
+    });
+    Route::post('/getOnlineMember','MemberController@getOnlineMember');
     Route::post('/logout','MemberController@logout');
     Route::post('/createBranch','BranchController@create');
     Route::post('/getBranch','BranchController@index');

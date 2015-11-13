@@ -262,21 +262,7 @@ while (true) {
 			$found_socket = array_search($changed_socket, $clients);
 			socket_getpeername($changed_socket, $ip);
 			unset($clients[$found_socket]);
-			// 	$text = json_encode(array('type'=>'system', 'message'=>$ip.' disconnected'));
-			// 	$b1 = 0x80 | (0x1 & 0x0f);
-			// 	$length = strlen($text);
-				
-			// 	if($length <= 125)
-			// 		$header = pack('CC', $b1, $length);
-			// 	elseif($length > 125 && $length < 65536)
-			// 		$header = pack('CCn', $b1, 126, $length);
-			// 	elseif($length >= 65536)
-			// 		$header = pack('CCNN', $b1, 127, $length);
-			// 	$response = $header.$text;
-			// foreach($clients as $changed_socket)
-			// {
-			// 	@socket_write($changed_socket,$response,strlen($response));
-			// }
+			
 
 		}
 	}
