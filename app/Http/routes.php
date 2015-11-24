@@ -54,6 +54,7 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     // });
     Route::post('/getNotices','NoticeController@index');
     Route::post('/sendNotice','NoticeController@create');
+    Route::post('/systemSwitch','MemberController@systemSwitch');
 });
 Route::post('/connectSocket','SocketController@create');
 Route::get('/connectSocket','SocketController@create');

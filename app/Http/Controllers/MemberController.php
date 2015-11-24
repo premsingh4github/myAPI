@@ -233,27 +233,12 @@ class MemberController extends Controller
                );
                return $returnData ;
         }
-        $rules = array(
-          'username' => 'required|numeric|unique:members'
-      );
-
-    $validator = Validator::make($request->all(), $rules);
+        
 
     
-    if ($validator->fails())
-        {
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'Invalid Client Code',
-                    'code' =>422
-                );
-            return Response::json($returnData, 422);
-        }
-        $data = $request->only('member_id','username','password','mtype');
+    
+        $data = $request->only('member_id');
         $member = Member::find($data['member_id']);
-        $member->username = $data['username'];
-        $member->password = Hash::make($data['password']);
-        $member->mtype = $data['mtype'];
         $member->status = 1;
 
         //return $member ;
@@ -336,43 +321,69 @@ class MemberController extends Controller
     }
     public function addMember(Request $request){
         $data = $request->only('fname','email','mname','lname','address','identity','nationality','dob','ban','cNumber','mNumber');
-        //return $data;
+        
+        try{
+            $member = new Member;
+            if($data['fname']){
+              $member->fname = $data['fname'];
+            }
+            if($data['mname']){
+              $member->mname = $data['mname'];
+            }
+            if($data['lname']){
+              $member->lname = $data['lname'];
+            }
+            $member->email = $data['email'];
+            $member->address = $data['address'];
+            $member->identity = $data['identity'];
+            $member->nationality = $data['nationality'];
+            $member->dob = $data['dob'];
+            $member->ban = $data['ban'];
 
-        $member = new Member;
-        $member->fname = $data['fname'];
-        $member->mname = $data['mname'];
-        $member->lname = $data['lname'];
-        $member->email = $data['email'];
-        $member->address = $data['address'];
-        $member->identity = $data['identity'];
-        $member->nationality = $data['nationality'];
-        $member->dob = $data['dob'];
-        $member->ban = $data['ban'];
-        $member->cNumber = $data['cNumber'];
-        $member->mNumber = $data['mNumber'];
-        $member->status = "0";
-        $member->mtype = $request['mtype'];
-        $member->password = Hash::make('password');
-        if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->first()){
-            $member->agentId = $agent->id;
+            $member->cNumber = $data['cNumber'];
+            $member->mNumber = $data['mNumber'];
+            $member->status = "0";
+            $member->mtype = $request['mtype'];
+            $member->username = sprintf("%02d",$request['branchId']).sprintf("%02d",$request['mtype']).sprintf("%04d",rand(0,9999));
+
+            $member->password = Hash::make($member->username);
+            if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->first()){
+                $member->agentId = $agent->id;
+            }
+            
+            if($member->save()){
+              
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'Stock created',
+                        'member' => $member,
+                        'code' =>200
+                    );
+                return Response::json($returnData, 200);
+            }
+            else{
+                $returnData = array(
+                        'status' => 'fail',
+                        'message' => 'member not created',
+                        'code' =>500
+                    );
+                return Response::json($returnData, 200);
+            }
+        }catch(\Exception $e){
+          return $e->getMessage();
         }
-        if($member->save()){
-            $returnData = array(
+        
+       
+    }
+     public function systemSwitch(Request $request){
+          $returnData = array(
                     'status' => 'ok',
-                    'message' => 'Stock created',
-                    'member' => $member,
+                    'message' => $request['status'],
                     'code' =>200
                 );
             return Response::json($returnData, 200);
+
+
         }
-        else{
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'member not created',
-                    'code' =>500
-                );
-            return Response::json($returnData, 200);
-        }
-    }
 
 }
