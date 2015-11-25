@@ -30,6 +30,7 @@ class CreateMembersTable extends Migration
             $table->string('password');
             $table->enum('status',['0','1','2']);
             $table->integer('mtype');
+            $table->integer('branchId')->nullable();
             $table->timestamps();
         });
     }

@@ -111,10 +111,12 @@ class MemberController extends Controller
         $member->mNumber = $data['mNumber'];
         $member->status = "0";
         $member->mtype = 6;
+        $member->branchId = $request['branchId'];
         $member->password = Hash::make('password');
         if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->where('mtype','=','7')->first()){
             $member->agentId = $agent->id;
         }
+        $member->username = sprintf("%02d",$request['branchId']).sprintf("%02d",$member->mtype).sprintf("%04d",rand(0,9999));
         if($member->save()){
             $returnData = array(
                     'status' => 'ok',
@@ -344,6 +346,7 @@ class MemberController extends Controller
             $member->mNumber = $data['mNumber'];
             $member->status = "0";
             $member->mtype = $request['mtype'];
+            $member->branchId = $request['branchId'];
             $member->username = sprintf("%02d",$request['branchId']).sprintf("%02d",$request['mtype']).sprintf("%04d",rand(0,9999));
 
             $member->password = Hash::make($member->username);
