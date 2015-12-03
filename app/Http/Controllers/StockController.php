@@ -8,10 +8,11 @@ use App\Http\Controllers\Controller;
 use Response;
 use App\Login;
 use App\ClientStock;
-use App\AddProduct;
-use App\Product;
+use App\Product,App\AddProduct;
 use App\Branch;
-use App\Account;
+use App\Account, App\StockType,Input;
+
+
 
 class StockController extends Controller
 {
@@ -25,12 +26,15 @@ class StockController extends Controller
     {
         
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
-        $stocks = Stock::all();
+        $stockTypes = StockType::all();
+        $stocks = Stock::orderBy('stockTypeId')->get();
         if($login->mtype == 1){
             if(count($stocks) > 0){
                 foreach ($stocks as $stock) {
                     $clientStocks = ClientStock::where('stockId','=',$stock->id)->where('status','=',0)->get();
                     $stock->request = $clientStocks;
+                    //$stockProducts = AddProduct::sum('quantity')->where('stockId',$stock->id);
+                    $stock->quantity = AddProduct::where('stockId',$stock->id)->sum('quantity');
                     $data[] = $stock; 
                 }
             }
@@ -42,9 +46,11 @@ class StockController extends Controller
         else{
            $data = $stocks;    
         }
+
              $returnData = array(
                     'status' => 'ok',
                     'stocks' => $data,
+                    'stockTypes' => $stockTypes,
                     'code' =>200
                 );
                 return $returnData ;
@@ -59,34 +65,45 @@ class StockController extends Controller
     {
         //return $request['branchId'];
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
-        $stock = new Stock;
-        $product = Product::find($request['productTypeId']);
-        $stock->branchId = $request['branchId'];
-        $stock->productTypeId = $request['productTypeId'];
-        $stock->minQuantity = ($request['minQuantity'] * $product->lot_size);
-        $stock->onlineQuantity = ($request['onlineQuantity'] * $product->lot_size);
-        
-         if($stock->save()){
-            $add_product = new AddProduct;
-            $add_product->stockId = $stock->id;
-            $add_product->quantity = ($stock->onlineQuantity * $product->lot_size) + ($stock->minQuantity * $product->lot_size) ;
-            $add_product->addedBy = $login->member_id;
-            $add_product->save();
+        $stock = Stock::where('stockTypeId',$request['stockTypeId'])->where('branchId',$request['branchId'])->where('productTypeId',$request['productTypeId'])->first();
+        if(count($stock)){
+             $stockProduct = new AddProduct;
+             $stockProduct->stockId = $stock->id;
+             $stockProduct->quantity = $request['onlineQuantity'];
+             $stockProduct->addedBy = $login->member_id;
+             $stockProduct->added = 1;
+             $stockProduct->save();
             $returnData = array(
-                    'status' => 'ok',
-                    'message' => 'Stock created',
+                    'status' => 'added',
                     'stock' => $stock,
+                    'stockProduct' => $stockProduct,
                     'code' =>200
                 );
-            return Response::json($returnData, 200);
+             return Response::json($returnData, 200);
         }
         else{
-            $returnData = array(
-                    'status' => 'fail',
-                    'message' => 'Stock not created',
-                    'code' =>500
-                );
-            return Response::json($returnData, 200);
+            try{
+              $stock = new Stock ; 
+              $stock->fill(Input::all());
+              $stock->addedBy = $login->member_id;
+              $stock->save();
+              $stockProduct = new AddProduct;
+              $stockProduct->stockId = $stock->id;
+              $stockProduct->quantity = $request['onlineQuantity'];
+              $stockProduct->addedBy = $login->member_id;
+              $stockProduct->added = 1;
+              $stockProduct->save();
+              $stock->quantity = $request['onlineQuantity'];
+              $returnData = array(
+                      'status' => 'created',
+                      'stockProduct' => $stockProduct,
+                      'stock' => $stock,
+                      'code' =>200
+                  );
+              return Response::json($returnData, 200);
+          }catch(\Exception $e){
+              return $e->getMessage();
+          }
         }
     }
 
@@ -262,5 +279,17 @@ class StockController extends Controller
                 );
         }
         return $returnData; 
+    }
+    public function addStockProduct(Request $request){
+
+    }
+    public function getStockTypes(){
+        $stockTypes = StockType::all();
+        $returnData = array(
+                    'status' => 'ok',
+                    'stockTypes' => $stockTypes,
+                    'code' => '200'
+                );
+        return Response::json($returnData,200);
     }
 }

@@ -34,30 +34,38 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-        $product = new Product;
-               $product->name = $request['name'];
-               $product->commision = $request['commision'];
-               $product->margin = $request['margin'];
-               $product->lot_size = $request['lot_size'];
-               $product->holding_cost = $request['holding_cost'];
-              
-                if($product->save()){
-                   $returnData = array(
-                           'status' => 'ok',
-                           'message' => 'Product created',
-                           'product' => $product,
-                           'code' =>200
-                       );
-                   return Response::json($returnData, 200);
-               }
-               else{
-                   $returnData = array(
-                           'status' => 'fail',
-                           'message' => 'product not created',
-                           'code' =>500
-                       );
-                   return Response::json($returnData, 200);
-               }
+        try{
+
+          $product = new Product;
+           $product->name = $request['name'];
+           $product->commision = $request['commision'];
+           $product->margin = $request['margin'];
+           $product->lot_size = $request['lot_size'];
+           $product->holding_cost = $request['holding_cost'];
+           $product->type = $request['producType'];
+          
+            if($product->save()){
+               $returnData = array(
+                       'status' => 'ok',
+                       'message' => 'Product created',
+                       'product' => $product,
+                       'code' =>200
+                   );
+               return Response::json($returnData, 200);
+           }
+           else{
+               $returnData = array(
+                       'status' => 'fail',
+                       'message' => 'product not created',
+                       'code' =>500
+                   );
+               return Response::json($returnData, 200);
+           }
+
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
+        
     }
 
     /**
@@ -87,9 +95,39 @@ class ProductController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        try{
+
+          $product = Product::find($request['productId']);
+           $product->name = $request['name'];
+           $product->commision = $request['commision'];
+           $product->margin = $request['margin'];
+           $product->lot_size = $request['lot_size'];
+           $product->holding_cost = $request['holding_cost'];
+           $product->type = $request['producType'];
+          
+            if($product->save()){
+               $returnData = array(
+                       'status' => 'ok',
+                       'message' => 'Product edited',
+                       'product' => $product,
+                       'code' =>200
+                   );
+               return Response::json($returnData, 200);
+           }
+           else{
+               $returnData = array(
+                       'status' => 'fail',
+                       'message' => 'product not edited',
+                       'code' =>500
+                   );
+               return Response::json($returnData, 200);
+           }
+
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
     }
 
     /**

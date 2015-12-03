@@ -35,10 +35,15 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/logout','MemberController@logout');
     Route::post('/createBranch','BranchController@create');
     
+
+
     Route::post('/createStock','StockController@create');
     Route::post('/getStocks','StockController@index');
+
     Route::post('/creatProduct','ProductController@create');
     Route::post('/getProducts','ProductController@index');
+    Route::post('/editProduct','ProductController@edit');
+
     Route::post('/getMemberTypes','MemberController@getMemberType');
     Route::post('/getMembers','MemberController@index');
     Route::post('/addClientStock','StockController@store');
@@ -55,6 +60,7 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/getNotices','NoticeController@index');
     Route::post('/sendNotice','NoticeController@create');
     Route::post('/systemSwitch','MemberController@systemSwitch');
+    Route::post('/getStockTypes','StockController@getStockTypes');
 });
 Route::post('/getBranch','BranchController@index');
 Route::post('/connectSocket','SocketController@create');
