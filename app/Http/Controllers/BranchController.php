@@ -87,9 +87,31 @@ class BranchController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        
+        $branch = Branch::find($request['branchId']);
+        $branch->name = $request['branchName'];
+        $branch->location = $request['branchLocation'];
+        $branch->delivery_charge = $request['delivery_charge'];
+
+         if($branch->save()){
+            $returnData = array(
+                    'status' => 'ok',
+                    'message' => 'Branch edited',
+                    'branch' => $branch,
+                    'code' =>200
+                );
+            return Response::json($returnData, 200);
+        }
+        else{
+            $returnData = array(
+                    'status' => 'fail',
+                    'message' => 'Branch not edited',
+                    'code' =>500
+                );
+            return Response::json($returnData, 200);
+        }
     }
 
     /**
