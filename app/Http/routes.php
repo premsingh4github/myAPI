@@ -47,18 +47,21 @@ Route::group(['prefix'=> 'API','middleware'=>'API'],function(){
     Route::post('/editProduct','ProductController@edit');
 
     Route::post('/getMemberTypes','MemberController@getMemberType');
-    Route::post('/getMembers','MemberController@index');
     Route::post('/addClientStock','StockController@store');
+
     Route::post('/addMember','MemberController@addMember');
+    Route::post('/editMember','MemberController@edit');
+    Route::post('/getMembers','MemberController@index');
+    Route::post('/suspendMember','MemberController@suspendMember');
+    Route::post('/releaseMember','MemberController@releaseMember');
+    Route::post('/deleteMember','MemberController@deleteMember');
+
     Route::group(['middleware' => 'Account'],function(){
         Route::post('/addAccount','MemberController@account');
         Route::post('/getAccounts','AccountController@index');
     });
     Route::post('/approveRequest','StockController@approveRequest');
     Route::post('/updateStock','StockController@update');
-    // Route::group(['middleware' => 'deal'],function(){
-        
-    // });
     Route::post('/getNotices','NoticeController@index');
     Route::post('/sendNotice','NoticeController@create');
     Route::post('/systemSwitch','MemberController@systemSwitch');

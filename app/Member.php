@@ -20,4 +20,5 @@ class Member extends Model implements AuthenticatableContract
     	$user = Member::select('id','fname','mname','lname')->where('status','=',1)->get();
     	return $user;
     }
+    protected $hidden = ['password','created_at','updated_at'];
 }

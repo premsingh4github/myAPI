@@ -28,7 +28,7 @@ class MemberController extends Controller
     // }
     public function index(Request $request)
     {   
-        $members = Member::select('id','fname','mname','lname','mtype','username')->where('status','=',1)->get();
+        $members = Member::where('status',1)->orWhere('status',2)->get();
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         if($login->mtype == 3 || $login->mtype == 1){
             foreach ($members as $member) {
@@ -83,7 +83,6 @@ class MemberController extends Controller
     public function create(Request $request)
     {
         $login = Login::where('remember_token','=',$request->header('token'))->where('status','=','1')->where('login_from','=',$request->ip())->count();
-        //$login = "empty";
         return $login;
     }
 
@@ -111,16 +110,16 @@ class MemberController extends Controller
         $member->mNumber = $data['mNumber'];
         $member->status = "0";
         $member->mtype = 6;
-        $member->branchId = $request['branchId'];
         $member->password = Hash::make('password');
+        $member->agentId = 0;
         if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->where('mtype','=','7')->first()){
             $member->agentId = $agent->id;
         }
-        $member->username = sprintf("%02d",$request['branchId']).sprintf("%02d",$member->mtype).sprintf("%04d",rand(0,9999));
+        $member->username = sprintf("%02d",$member->agentId).sprintf("%02d",$member->mtype).sprintf("%04d",rand(0,9999));
         if($member->save()){
             $returnData = array(
                     'status' => 'ok',
-                    'message' => 'Stock created',
+                    'message' => 'Member created',
                     'member' => $member,
                     'code' =>200
                 );
@@ -153,9 +152,135 @@ class MemberController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $data = $request->only('fname','email','mname','lname','address','identity','nationality','dob','ban','cNumber','mNumber');
+        
+        try{
+            $member = Member::find($request['memberId']);
+            if($data['fname']){
+              $member->fname = $data['fname'];
+            }
+            if($data['mname']){
+              $member->mname = $data['mname'];
+            }
+            if($data['lname']){
+              $member->lname = $data['lname'];
+            }
+            $member->email = $data['email'];
+            $member->address = $data['address'];
+            $member->identity = $data['identity'];
+            $member->nationality = $data['nationality'];
+            $member->dob = $data['dob'];
+            $member->ban = $data['ban'];
+            $member->cNumber = $data['cNumber'];
+            $member->mNumber = $data['mNumber'];
+            $member->mtype = $request['mtype'];
+            if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->first()){
+                $member->agentId = $agent->id;
+            }
+            else{
+              $member->agentId = 0;
+            }
+            if($member->save()){
+              
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'member updated',
+                        'member' => $member,
+                        'code' =>200
+                    );
+                return Response::json($returnData, 200);
+            }
+            else{
+                $returnData = array(
+                        'status' => 'fail',
+                        'message' => 'member not updated',
+                        'code' =>500
+                    );
+                return Response::json($returnData, 200);
+            }
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
+    }
+    public function suspendMember(Request $request){
+        try{
+            $member = Member::find($request['memberId']);
+            $member->status = 2;
+            if($member->save()){
+              
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'member suspended',
+                        'member' => $member,
+                        'code' =>200
+                    );
+                return Response::json($returnData, 200);
+            }
+            else{
+                $returnData = array(
+                        'status' => 'fail',
+                        'message' => 'member not suspended',
+                        'code' =>500
+                    );
+                return Response::json($returnData, 200);
+            }
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
+    }
+    public function releaseMember(Request $request){
+        try{
+            $member = Member::find($request['memberId']);
+            $member->status = 1;
+            if($member->save()){
+              
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'member released',
+                        'member' => $member,
+                        'code' =>200
+                    );
+                return Response::json($returnData, 200);
+            }
+            else{
+                $returnData = array(
+                        'status' => 'fail',
+                        'message' => 'member not released',
+                        'code' =>500
+                    );
+                return Response::json($returnData, 200);
+            }
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
+    }
+    public function deleteMember(Request $request){
+        try{
+            $member = Member::find($request['memberId']);
+            $member->status = 3;
+            if($member->save()){
+              
+                $returnData = array(
+                        'status' => 'ok',
+                        'message' => 'member deleted',
+                        'member' => $member,
+                        'code' =>200
+                    );
+                return Response::json($returnData, 200);
+            }
+            else{
+                $returnData = array(
+                        'status' => 'fail',
+                        'message' => 'member not deleted',
+                        'code' =>500
+                    );
+                return Response::json($returnData, 200);
+            }
+        }catch(\Exception $e){
+          return $e->getMessage();
+        }
     }
 
     /**
@@ -341,24 +466,21 @@ class MemberController extends Controller
             $member->nationality = $data['nationality'];
             $member->dob = $data['dob'];
             $member->ban = $data['ban'];
-
             $member->cNumber = $data['cNumber'];
             $member->mNumber = $data['mNumber'];
             $member->status = "0";
             $member->mtype = $request['mtype'];
-            $member->branchId = $request['branchId'];
-            $member->username = sprintf("%02d",$request['branchId']).sprintf("%02d",$request['mtype']).sprintf("%04d",rand(0,9999));
-
+            $member->agentId = 0;
             $member->password = Hash::make($member->username);
             if(isset($request['agent']) && $agent = Member::where('username','=',$request['agent'])->first()){
                 $member->agentId = $agent->id;
             }
-            
+             $member->username = sprintf("%02d",$member->agentId).sprintf("%02d",$request['mtype']).sprintf("%04d",rand(0,9999));
             if($member->save()){
               
                 $returnData = array(
                         'status' => 'ok',
-                        'message' => 'Stock created',
+                        'message' => 'member created',
                         'member' => $member,
                         'code' =>200
                     );

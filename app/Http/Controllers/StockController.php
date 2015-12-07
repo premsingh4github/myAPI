@@ -27,8 +27,9 @@ class StockController extends Controller
         
         $login = Login::where('remember_token','=',$request->header('token'))->where('login_from','=',$request->ip())->join('members', 'members.id', '=', 'logins.member_id')->where('logins.status','=','1')->first();
         $stockTypes = StockType::all();
-        $stocks = Stock::orderBy('stockTypeId')->get();
+        
         if($login->mtype == 1){
+            $stocks = Stock::orderBy('stockTypeId')->get();
             if(count($stocks) > 0){
                 foreach ($stocks as $stock) {
                     $clientStocks = ClientStock::where('stockId','=',$stock->id)->where('status','=',0)->get();
@@ -44,7 +45,16 @@ class StockController extends Controller
             
         }
         else{
-           $data = $stocks;    
+            $stocks = Stock::orderBy('stockTypeId')->where('stockTypeId',3)->get();
+           if(count($stocks) > 0){
+               foreach ($stocks as $stock) {
+                   $stock->quantity = AddProduct::where('stockId',$stock->id)->sum('quantity');
+                   $data[] = $stock; 
+               }
+           }
+           else{
+             $data = $stocks;  
+           }   
         }
 
              $returnData = array(
